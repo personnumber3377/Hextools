@@ -1,0 +1,8 @@
+README.md
+setup.py
+hexutils/__init__.py
+hexutils/findhex.py
+hexutils.egg-info/PKG-INFO
+hexutils.egg-info/SOURCES.txt
+hexutils.egg-info/dependency_links.txt
+hexutils.egg-info/top_level.txt

@@ -1,0 +1,67 @@
+#!/bin/python3
+
+'''
+This code implements the following C-code but in python:
+
+uint32 old_bf_read::ReadVarInt32()
+{
+	uint32 result = 0;
+	int count = 0;
+	uint32 b;
+
+	do 
+	{
+		if ( count == bitbuf::kMaxVarint32Bytes ) 
+		{
+			// If we get here it means that the fifth bit had its
+			// high bit set, which implies corrupt data.
+			Assert( 0 );
+			return result;
+		}
+		b = ReadUBitLong( 8 );
+		result |= (b & 0x7F) << (7 * count);
+		++count;
+	} while (b & 0x80);
+
+	return result;
+}
+
+
+'''
+
+
+class bf_read:
+	def __init__(self, bytes_stuff):
+		print("bytes_stuff == "+str(bytes_stuff))
+		self.bytes = bytes_stuff
+		self.counter = 0
+
+	def ReadByte(self):
+
+		result = self.bytes[self.counter]
+		self.counter += 1
+		return result
+
+
+
+	def ReadVarInt32(self):
+		result = 0
+		count = 0
+		b = 0x80
+
+		while (b & 0x80):
+			b = self.ReadByte()
+			result |= (b & 0x7f) << (7* count)
+			count += 1
+		return result
+
+
+def to_bytes(hex_string):
+	return bytearray.fromhex(hex_string)
+
+if __name__=="__main__":
+	hex_string = str(input("Please input hex_string: "))
+	reader = bf_read(to_bytes(hex_string))
+	print(hex(reader.ReadVarInt32()))
+
+
